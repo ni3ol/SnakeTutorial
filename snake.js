@@ -1,7 +1,7 @@
 //Draws apple and snake to screen
 var draw = function(snakeToDraw, apple) 
 {
-  var drawableSnake = { color: "green", pixels: snakeToDraw };
+  var drawableSnake = { color: "yellow", pixels: snakeToDraw };
   var drawableApple = { color: "red", pixels: [apple] };
   var drawableObjects = [drawableSnake, drawableApple];
   CHUNK.draw(drawableObjects);
@@ -86,5 +86,5 @@ var growSnake = function(snake)
 var apple = { top: 8, left: 10 };
 //Represents snake. Creates length of snake using array/hash map
 var snake = [{ top: 1, left: 0, direction: "down" }, { top: 0, left: 0, direction: "down" }];
-CHUNK.executeNTimesPerSecond(advanceGame, 1);
+CHUNK.executeNTimesPerSecond(advanceGame, 5);
 CHUNK.onArrowKey(changeDirection);
