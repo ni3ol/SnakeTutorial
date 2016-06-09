@@ -1,10 +1,10 @@
-var drawSnake = function(snakeToDraw) 
+//Draws apple and snake to screen
+var draw = function(snakeToDraw, apple) 
 {
-	//Defines the length and colour of snake
-	var drawableSnake = { color: "yellow", pixels: snake };
-	//Array/object drawn
-	var drawableObjects = [drawableSnake];
-	CHUNK.draw(drawableObjects);
+  var drawableSnake = { color: "green", pixels: snakeToDraw };
+  var drawableApple = { color: "red", pixels: [apple] };
+  var drawableObjects = [drawableSnake, drawableApple];
+  CHUNK.draw(drawableObjects);
 }
 
 var moveSegment = function(segment) 
@@ -21,13 +21,22 @@ var moveSegment = function(segment)
   return segment;
 }
 
+var segmentFurtherForwardThan = function(index, snake) 
+{
+  if (snake[index - 1] === undefined) {
+    return snake[index];
+  } else {
+    return snake[index - 1];
+  }
+}
+
 var moveSnake = function(snake) 
 {
-  var oldSegment = snake[0];
-  var newSegment = moveSegment(oldSegment);
-  newSegment.direction = oldSegment.direction;
-  var newSnake = [newSegment];
-  return newSnake;
+  return snake.map(function(oldSegment, segmentIndex) {
+    var newSegment = moveSegment(oldSegment);
+    newSegment.direction = segmentFurtherForwardThan(segmentIndex, snake).direction;
+    return newSegment;
+  });
 }
 
 var advanceGame = function() 
@@ -37,7 +46,7 @@ var advanceGame = function()
     CHUNK.endGame();
     CHUNK.flashMessage("Whoops! you hit a wall!");
   }
-  drawSnake(snake);
+  draw(snake, apple);
 }
 
 var changeDirection = function(direction) 
@@ -45,7 +54,8 @@ var changeDirection = function(direction)
   snake[0].direction = direction;
 }
 
+var apple = { top: 8, left: 10 };
 //Represents snake. Creates length of snake using array/hash map
-var snake = [{ top: 0, left: 0, direction: "down"}];
+var snake = [{ top: 1, left: 0, direction: "down" }, { top: 0, left: 0, direction: "down" }];
 CHUNK.executeNTimesPerSecond(advanceGame, 1);
 CHUNK.onArrowKey(changeDirection);
